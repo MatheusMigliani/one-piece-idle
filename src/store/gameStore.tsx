@@ -1,6 +1,15 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
+interface Fruit {
+  id: number;
+  name: string;
+  icon: string;
+  filename: string;
+  description: string;
+  cost: number;
+}
+
 interface GameState {
   berries: number;
   upgradeLevel: number;
@@ -9,17 +18,21 @@ interface GameState {
   attack: number;
   defense: number;
   speed: number;
-  haki: string[];
   hp: number;
   maxHp: number;
   enemyHp: number;
   enemyMaxHp: number;
-  fruit: string[];
+  haki: number;
+  berriesPerSecond: number;
+  ownedFruit: Fruit | null;
   addBerries: () => void;
-  upgrade: (type: "attack" | "defense" | "speed") => void;
+  upgrade: (
+    type: "attack" | "defense" | "speed" | "haki" | "berriesPerSecond"
+  ) => void;
   gainExperience: (amount: number) => void;
   attackEnemy: () => void;
   useSpecialAbility: () => void;
+  buyFruit: (fruit: Fruit) => void;
 }
 
 export const useGameStore = create<GameState>()(
@@ -32,14 +45,15 @@ export const useGameStore = create<GameState>()(
       attack: 10,
       defense: 5,
       speed: 5,
-      haki: 0,
       hp: 100,
       maxHp: 100,
       enemyHp: 50,
       enemyMaxHp: 50,
-      fruit: [],
+      haki: 1,
+      berriesPerSecond: 1,
+      ownedFruit: null,
       addBerries: () =>
-        set((state) => ({ berries: state.berries + state.upgradeLevel })),
+        set((state) => ({ berries: state.berries + state.berriesPerSecond })),
       upgrade: (type) =>
         set((state) => {
           const cost = state[type] * 10;
@@ -85,6 +99,16 @@ export const useGameStore = create<GameState>()(
             };
           }
           return { enemyHp: newEnemyHp };
+        }),
+      buyFruit: (fruit) =>
+        set((state) => {
+          if (state.berries >= fruit.cost && !state.ownedFruit) {
+            return {
+              berries: state.berries - fruit.cost,
+              ownedFruit: fruit,
+            };
+          }
+          return state;
         }),
     }),
     {

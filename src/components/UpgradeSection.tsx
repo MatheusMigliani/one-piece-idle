@@ -1,16 +1,17 @@
-import type React from "react";
-import { motion } from "framer-motion";
-import { useGameStore } from "../store/gameStore";
+import type React from "react"
+import { motion } from "framer-motion"
+import { useGameStore } from "../store/gameStore"
 
 const UpgradeSection: React.FC = () => {
-  const { berries, attack, defense, speed, haki, upgrade } = useGameStore();
+  const { berries, attack, defense, speed, haki, berriesPerSecond, upgrade } = useGameStore()
 
   const upgradeTypes = [
     { name: "Ataque", type: "attack", icon: "⚔️", value: attack },
     { name: "Defesa", type: "defense", icon: "🛡️", value: defense },
     { name: "Velocidade", type: "speed", icon: "💨", value: speed },
-    { name: "Haki", type: "haki", icon: "🔵", value: haki },
-  ];
+    { name: "Haki", type: "haki", icon: "✨", value: haki },
+    { name: "Berries/s", type: "berriesPerSecond", icon: "💰", value: berriesPerSecond },
+  ]
 
   return (
     <motion.div
@@ -32,9 +33,7 @@ const UpgradeSection: React.FC = () => {
             <p>Nível: {upgradeType.value}</p>
             <p>Custo: {upgradeType.value * 10} Berries</p>
             <button
-              onClick={() =>
-                upgrade(upgradeType.type as "attack" | "defense" | "speed")
-              }
+              onClick={() => upgrade(upgradeType.type as "attack" | "defense" | "speed" | "haki" | "berriesPerSecond")}
               disabled={berries < upgradeType.value * 10}
               className="mt-2 bg-yellow-500 text-blue-900 px-4 py-2 rounded-full font-bold disabled:opacity-50"
             >
@@ -44,7 +43,8 @@ const UpgradeSection: React.FC = () => {
         ))}
       </div>
     </motion.div>
-  );
-};
+  )
+}
 
-export default UpgradeSection;
+export default UpgradeSection
+
