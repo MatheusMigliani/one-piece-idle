@@ -1,16 +1,6 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
-
-interface Fruit {
-  id: number;
-  name: string;
-  icon: string;
-  filename: string;
-  description: string;
-  cost: number;
-  rarity: string;
-  roman_name: string;
-}
+import { Fruit } from "@/lib/types";
 
 interface GameState {
   berries: number;
@@ -27,6 +17,10 @@ interface GameState {
   haki: number;
   berriesPerSecond: number;
   ownedFruit: Fruit | null;
+  availableFruits: Fruit[];
+  lastFruitUpdate: number; // Timestamp da última atualização das frutas
+
+  // Métodos
   addBerries: () => void;
   upgrade: (
     type: "attack" | "defense" | "speed" | "haki" | "berriesPerSecond"
@@ -35,11 +29,12 @@ interface GameState {
   attackEnemy: () => void;
   useSpecialAbility: () => void;
   buyFruit: (fruit: Fruit) => void;
+  updateAvailableFruits: (fruits: Fruit[]) => void; // Método corrigido
 }
 
 export const useGameStore = create<GameState>()(
   persist(
-    (set) => ({
+    (set, get) => ({
       berries: 0,
       upgradeLevel: 1,
       characterLevel: 1,
@@ -54,6 +49,10 @@ export const useGameStore = create<GameState>()(
       haki: 1,
       berriesPerSecond: 1,
       ownedFruit: null,
+      availableFruits: [],
+      lastFruitUpdate: 0,
+
+      // Métodos
       addBerries: () =>
         set((state) => ({ berries: state.berries + state.berriesPerSecond })),
       upgrade: (type) =>
@@ -102,26 +101,40 @@ export const useGameStore = create<GameState>()(
           }
           return { enemyHp: newEnemyHp };
         }),
-      buyFruit: (fruit: Fruit & { cost: number }) => {
+      buyFruit: (fruit) => {
         set((state) => {
           const cost = fruit.cost;
 
           if (state.berries >= cost && !state.ownedFruit) {
-            localStorage.setItem("ownedFruit", JSON.stringify(fruit));
-            localStorage.setItem("berries", String(state.berries - cost));
+            // Remove a fruta comprada da lista de frutas disponíveis
+            const updatedAvailableFruits = state.availableFruits.filter(
+              (f) => f.id !== fruit.id
+            );
+
+            console.log("Fruta comprada:", fruit); // Log da fruta comprada
+            console.log("Estado antes da compra:", get()); // Log do estado antes da compra
 
             return {
               berries: state.berries - cost,
-              ownedFruit: fruit,
+              ownedFruit: fruit, // Atualiza a fruta comprada
+              availableFruits: updatedAvailableFruits, // Atualiza a lista de frutas disponíveis
             };
           }
           return state;
         });
       },
+      updateAvailableFruits: (fruits: Fruit[]) => {
+        set({
+          availableFruits: fruits,
+          lastFruitUpdate: Date.now(),
+        });
+      },
     }),
-
     {
-      name: "one-piece-idle-game",
+      name: "one-piece-idle-game", // Nome do localStorage
+      onRehydrateStorage: (state) => {
+        console.log("Estado restaurado:", state); // Log do estado restaurado
+      },
     }
   )
 );
