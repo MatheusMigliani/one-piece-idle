@@ -8,6 +8,8 @@ interface Fruit {
   filename: string;
   description: string;
   cost: number;
+  rarity: string;
+  roman_name: string;
 }
 
 interface GameState {
@@ -41,7 +43,7 @@ export const useGameStore = create<GameState>()(
       berries: 0,
       upgradeLevel: 1,
       characterLevel: 1,
-      experience: 0,
+      experience: 1,
       attack: 10,
       defense: 5,
       speed: 5,
@@ -100,17 +102,24 @@ export const useGameStore = create<GameState>()(
           }
           return { enemyHp: newEnemyHp };
         }),
-      buyFruit: (fruit) =>
+      buyFruit: (fruit: Fruit & { cost: number }) => {
         set((state) => {
-          if (state.berries >= fruit.cost && !state.ownedFruit) {
+          const cost = fruit.cost;
+
+          if (state.berries >= cost && !state.ownedFruit) {
+            localStorage.setItem("ownedFruit", JSON.stringify(fruit));
+            localStorage.setItem("berries", String(state.berries - cost));
+
             return {
-              berries: state.berries - fruit.cost,
+              berries: state.berries - cost,
               ownedFruit: fruit,
             };
           }
           return state;
-        }),
+        });
+      },
     }),
+
     {
       name: "one-piece-idle-game",
     }

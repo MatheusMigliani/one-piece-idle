@@ -4,8 +4,12 @@ import { motion } from "framer-motion";
 import { useGameStore } from "../store/gameStore";
 
 const BattleSection: React.FC = () => {
-  const { enemyHp, enemyMaxHp, attackEnemy, useSpecialAbility } =
-    useGameStore();
+  const {
+    enemyHp,
+    enemyMaxHp,
+    attackEnemy,
+    useSpecialAbility: specialAbility,
+  } = useGameStore();
   const [battleLog, setBattleLog] = useState<string[]>([]);
 
   const handleAttack = () => {
@@ -14,7 +18,7 @@ const BattleSection: React.FC = () => {
   };
 
   const handleSpecialAbility = () => {
-    useSpecialAbility();
+    specialAbility();
     setBattleLog((prev) => [...prev, "Você usou uma habilidade especial!"]);
   };
 

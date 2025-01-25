@@ -28,7 +28,7 @@ const App: React.FC = () => {
         transition={{ duration: 0.5 }}
         className="text-4xl font-bold text-center mb-8"
       >
-        One Piece Idle MMO RPG
+        One Piece Idle MMO RPG by DuBZiN
       </motion.h1>
       <div className="text-center mb-4">
         <p className="text-2xl">Berries: {berries}</p>
@@ -37,9 +37,9 @@ const App: React.FC = () => {
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         <UpgradeSection />
+        <BattleSection />
         <SkillsSection />
         <CharacterSection />
-        <BattleSection />
         <FruitSection />
       </div>
     </div>
