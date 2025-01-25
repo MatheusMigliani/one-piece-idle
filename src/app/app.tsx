@@ -6,10 +6,11 @@ import UpgradeSection from "@/components/UpgradeSection";
 import SkillsSection from "@/components/SkillsSection";
 import CharacterSection from "@/components/CharacterSection";
 import BattleSection from "@/components/BattleSection";
-import FruitSection from "components/fruitSection";
+import FruitSection from "@/components/fruitSection";
 
 const App: React.FC = () => {
-  const { berries, upgradeLevel, addBerries } = useGameStore();
+  const { berries, upgradeLevel, berriesPerSecond, addBerries } =
+    useGameStore();
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -32,13 +33,14 @@ const App: React.FC = () => {
       <div className="text-center mb-4">
         <p className="text-2xl">Berries: {berries}</p>
         <p>Nível de Upgrade: {upgradeLevel}</p>
+        <p>Berries por segundo: {berriesPerSecond}</p>
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         <UpgradeSection />
         <SkillsSection />
-        <FruitSection />
         <CharacterSection />
         <BattleSection />
+        <FruitSection />
       </div>
     </div>
   );
