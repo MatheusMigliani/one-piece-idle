@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { useCollapse } from "react-collapsed";
-import { Fruit } from "@/lib/types";
+import { Fruit } from "lib/types";
 import { useState } from "react";
 
 interface FruitCardProps {

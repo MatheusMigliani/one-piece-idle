@@ -1,6 +1,6 @@
 import type React from "react";
 import { motion } from "framer-motion";
-import { useGameStore } from "../store/gameStore";
+import { useGameStore } from "../../store/gameStore";
 
 const CharacterSection: React.FC = () => {
   const { characterLevel, experience, attack, defense, speed, hp, maxHp } =

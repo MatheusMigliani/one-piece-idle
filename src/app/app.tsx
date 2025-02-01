@@ -1,24 +1,25 @@
 import type React from "react";
 import { useEffect } from "react";
 import { motion } from "framer-motion";
-import { useGameStore } from "@/store/gameStore";
-import UpgradeSection from "@/components/UpgradeSection";
-import SkillsSection from "@/components/SkillsSection";
-import CharacterSection from "@/components/CharacterSection";
-import BattleSection from "@/components/BattleSection";
-import FruitSection from "@/components/fruitSection";
+
+import BattleSection from "../components/game/BattleSection";
+import CharacterSection from "../components/game/CharacterSection";
+import FruitSection from "../components/game/FruitSection";
+import SkillsSection from "../components/game/SkillsSection";
+import UpgradeSection from "../components/game/UpgradeSection";
+import { useResourceStore } from "@/store/useResourceStore";
 
 const App: React.FC = () => {
   const { berries, upgradeLevel, berriesPerSecond, addBerries } =
-    useGameStore();
+    useResourceStore();
 
   useEffect(() => {
     const interval = setInterval(() => {
-      addBerries();
+      addBerries(berriesPerSecond);
     }, 1000);
 
     return () => clearInterval(interval);
-  }, [addBerries]);
+  }, [berriesPerSecond, addBerries]);
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-blue-500 to-blue-700 text-white p-4">

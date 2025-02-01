@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { useGameStore } from "../store/gameStore";
-import { FruitCard } from "@/components/my/FruitCard"; // Importe o componente FruitCard
+import { useGameStore } from "../../store/gameStore";
+import { FruitCard } from "./FruitCard"; // Importe o componente FruitCard
 import { Fruit, rarityMap } from "@/lib/types";
 
 // Mapa de raridades
